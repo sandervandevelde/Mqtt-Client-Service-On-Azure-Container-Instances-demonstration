@@ -2,9 +2,13 @@
 
 ## Prerequisites
 
-From the previous [blog post](https://sandervandevelde.wordpress.com/2024/08/24/getting-started-with-azure-container-instances/), we should have inherited a consumer group, Azure container repository and a UserID. 
+From the first [blog post](https://sandervandevelde.wordpress.com/2024/08/24/getting-started-with-azure-container-instances/), we should have inherited a consumer group, Azure container repository and a UserID. 
 
 The userID can pull containers from the registry.
+
+From the second [blog post](https://sandervandevelde.wordpress.com/2024/09/04/running-the-event-hub-event-processor-in-azure-container-instances/), we learned how to deploy an Event Hub Event Processor.
+
+Be sure you first need to [deploy](az-cli-eventgrid-mqtt.md) the Event Grid MQTT broker via the AZ CLI.
 
 
 
@@ -146,7 +150,7 @@ Notice that the client certificates are part of the module and not configurable 
 Create the Azure Container Instance running the EventProcessor module:
 
 ```
-az container create --name aci-test-eventprocessor --resource-group acsResourceGroup --image mycontainerregistrysvdv.azurecr.io/mqtt-stateful-service:0.0.1-amd64 --acr-identity $USERID --assign-identity $USERID --cpu 1 --memory 1 --os-type Linux --environment-variables eventHubNamespaceUri='acs-eventprocessor-service-ehns.servicebus.windows.net' consumerGroupName='aci' eventHubName='messages' blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesacicheckpoints' brokerHostName='egns-aci-test-mqtt.westeurope-1.ts.eventgrid.azure.net' brokerPort='8883' deviceId='client1-authnID' publishTopic='acitest/client2-authnID/alert' --sku Standard --run-as-group $USERID
+az container create --name aci-test-mqttclient --resource-group acsResourceGroup --image mycontainerregistrysvdv.azurecr.io/mqtt-stateful-service:0.0.1-amd64 --acr-identity $USERID --assign-identity $USERID --cpu 1 --memory 1 --os-type Linux --environment-variables eventHubNamespaceUri='acs-eventprocessor-service-ehns.servicebus.windows.net' consumerGroupName='aci' eventHubName='messages' blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesacicheckpoints' brokerHostName='egns-aci-test-mqtt.westeurope-1.ts.eventgrid.azure.net' brokerPort='8883' deviceId='client1-authnID' publishTopic='acitest/client2-authnID/alert' --sku Standard --run-as-group $USERID
 ```
 
 
@@ -156,5 +160,5 @@ az container create --name aci-test-eventprocessor --resource-group acsResourceG
 Remove the Azure Container Instance:
 
 ```
-az container delete --resource-group acsResourceGroup --name aci-test-eventprocessor --yes
+az container delete --resource-group acsResourceGroup --name aci-test-mqttclient --yes
 ```
