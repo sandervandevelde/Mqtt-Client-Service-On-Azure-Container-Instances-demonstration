@@ -20,10 +20,18 @@ public class  MqttClientProvider
 
         _logger = logger;
 
-        // Add the loaded certificate to a certificate collection
+        //// Add the loaded certificate to a certificate collection via constants
+        //X509Certificate2Collection certificateCollection = new X509Certificate2Collection
+        //{
+        //    new X509Certificate2(X509Certificate2.CreateFromPem(pemCert, keyCert).Export(X509ContentType.Pkcs12))
+        //};
+
+        // Add the loaded certificate to a certificate collection via files
+        var pemCert = "client1-authnID.pem";
+        var keyCert = "client1-authnID.key";
         X509Certificate2Collection certificateCollection = new X509Certificate2Collection
         {
-            new X509Certificate2(X509Certificate2.CreateFromPem(pemCert, keyCert).Export(X509ContentType.Pkcs12))
+            new X509Certificate2(X509Certificate2.CreateFromPemFile(pemCert, keyCert).Export(X509ContentType.Pkcs12))
         };
 
         var tlsOptions =
@@ -60,24 +68,24 @@ public class  MqttClientProvider
         return true;
     }
 
-    private static string keyCert = @"-----BEGIN EC PRIVATE KEY-----
-MHcCAQEEIKqxcNh6yYJPUrtHR6hIOs6q3I+2VWGn+8BM8c/paT6WoAoGCCqGSM49
-AwEHoUQDQgAE4lTqBbb62dCyL5UEPbQDEjGi5YfMN0RNtBh+P6RMQ0bFIAf+BPZC
-JFHkaVZ6matbH9tBu+cQNV223DWDppM6vA==
------END EC PRIVATE KEY-----";
+//    private static string keyCert = @"-----BEGIN EC PRIVATE KEY-----
+//MHcCAQEEIKqxcNh6yYJPUrtHR6hIOs6q3I+2VWGn+8BM8c/paT6WoAoGCCqGSM49
+//AwEHoUQDQgAE4lTqBbb62dCyL5UEPbQDEjGi5YfMN0RNtBh+P6RMQ0bFIAf+BPZC
+//JFHkaVZ6matbH9tBu+cQNV223DWDppM6vA==
+//-----END EC PRIVATE KEY-----";
 
-    private static string pemCert = @"-----BEGIN CERTIFICATE-----
-MIIB3zCCAYWgAwIBAgIQTgzW3MOcMQvK1Cq4Z/wrWTAKBggqhkjOPQQDAjA4MRIw
-EAYDVQQKEwlBY2lUZXN0Q0ExIjAgBgNVBAMTGUFjaVRlc3RDQSBJbnRlcm1lZGlh
-dGUgQ0EwHhcNMjQwOTAyMTQzMDI2WhcNMzIxMTE5MTQzMDEwWjAaMRgwFgYDVQQD
-Ew9jbGllbnQxLWF1dGhuSUQwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATiVOoF
-tvrZ0LIvlQQ9tAMSMaLlh8w3RE20GH4/pExDRsUgB/4E9kIkUeRpVnqZq1sf20G7
-5xA1XbbcNYOmkzq8o4GOMIGLMA4GA1UdDwEB/wQEAwIHgDAdBgNVHSUEFjAUBggr
-BgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFAsfqnUYFdC8pM0AHMB8Y1hr+1bK
-MB8GA1UdIwQYMBaAFC4tuqtJumyiyaO0pwMkgFtrtXf+MBoGA1UdEQQTMBGCD2Ns
-aWVudDEtYXV0aG5JRDAKBggqhkjOPQQDAgNIADBFAiEAhHi/OxM+W8LVg6EMTwb6
-hQSr3NJNQJQYqbG+hS0hyEsCIFSaIJ+kSoKWPj9Sbs0pcwnkBLXWgat/GE6YxG8C
-Evyw
------END CERTIFICATE-----";
+//    private static string pemCert = @"-----BEGIN CERTIFICATE-----
+//MIIB3zCCAYWgAwIBAgIQTgzW3MOcMQvK1Cq4Z/wrWTAKBggqhkjOPQQDAjA4MRIw
+//EAYDVQQKEwlBY2lUZXN0Q0ExIjAgBgNVBAMTGUFjaVRlc3RDQSBJbnRlcm1lZGlh
+//dGUgQ0EwHhcNMjQwOTAyMTQzMDI2WhcNMzIxMTE5MTQzMDEwWjAaMRgwFgYDVQQD
+//Ew9jbGllbnQxLWF1dGhuSUQwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATiVOoF
+//tvrZ0LIvlQQ9tAMSMaLlh8w3RE20GH4/pExDRsUgB/4E9kIkUeRpVnqZq1sf20G7
+//5xA1XbbcNYOmkzq8o4GOMIGLMA4GA1UdDwEB/wQEAwIHgDAdBgNVHSUEFjAUBggr
+//BgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFAsfqnUYFdC8pM0AHMB8Y1hr+1bK
+//MB8GA1UdIwQYMBaAFC4tuqtJumyiyaO0pwMkgFtrtXf+MBoGA1UdEQQTMBGCD2Ns
+//aWVudDEtYXV0aG5JRDAKBggqhkjOPQQDAgNIADBFAiEAhHi/OxM+W8LVg6EMTwb6
+//hQSr3NJNQJQYqbG+hS0hyEsCIFSaIJ+kSoKWPj9Sbs0pcwnkBLXWgat/GE6YxG8C
+//Evyw
+//-----END CERTIFICATE-----";
 
 }

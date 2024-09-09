@@ -12,4 +12,12 @@
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.21.2" />
 		<PackageReference Include="MQTTnet" Version="4.3.6.1152" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Update="client1-authnID.key">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="client1-authnID.pem">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>
