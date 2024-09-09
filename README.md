@@ -8,9 +8,10 @@ Demonstration of running a stateful MQTT client service within the Azure Contain
 
 ## CLI commands and flow
 
-If you want to play along, check the [az-cli-event-processor.md](az-cli-event-processor.md) file for building and deploying resouces and container instance.
+If you want to play along, check the [az-cli-mqtt-stateful-service.md](az-cli-mqtt-stateful-service.md) file for building and deploying resouces and container instance.
 
 Regarding the Azure Event Grid MQTT support, check the [az-cli-eventgrid-mqtt.md](az-cli-eventgrid-mqtt.md) for building all MQTT related resources. 
+
 
 
 ## Environment variables

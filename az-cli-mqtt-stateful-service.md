@@ -1,4 +1,4 @@
-# AZ CLI infrastructure setup
+# AZ CLI infrastructure setup for the MQTT stateful service
 
 ## Prerequisites
 
@@ -141,7 +141,7 @@ blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesaci
 Create the Azure Container Instance running the EventProcessor module:
 
 ```
-az container create --name aci-test-eventprocessor --resource-group acsResourceGroup --image mycontainerregistrysvdv.azurecr.io/event-processor-service:0.0.1-amd64 --acr-identity $USERID --assign-identity $USERID --cpu 1 --memory 1 --os-type Linux --environment-variables eventHubNamespaceUri='acs-eventprocessor-service-ehns.servicebus.windows.net' consumerGroupName='aci' eventHubName='messages' blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesacicheckpoints' --sku Standard --run-as-group $USERID
+az container create --name aci-test-eventprocessor --resource-group acsResourceGroup --image mycontainerregistrysvdv.azurecr.io/mqtt-stateful-service:0.0.1-amd64 --acr-identity $USERID --assign-identity $USERID --cpu 1 --memory 1 --os-type Linux --environment-variables eventHubNamespaceUri='acs-eventprocessor-service-ehns.servicebus.windows.net' consumerGroupName='aci' eventHubName='messages' blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesacicheckpoints' --sku Standard --run-as-group $USERID
 ```
 
 
