@@ -10,5 +10,6 @@
 		<PackageReference Include="Azure.Messaging.EventHubs.Processor" Version="5.11.5" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.21.2" />
+		<PackageReference Include="MQTTnet" Version="4.3.6.1152" />
 	</ItemGroup>
 </Project>

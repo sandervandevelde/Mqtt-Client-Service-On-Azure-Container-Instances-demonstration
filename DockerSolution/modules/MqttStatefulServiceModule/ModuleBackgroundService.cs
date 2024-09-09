@@ -29,12 +29,26 @@ internal class ModuleBackgroundService : BackgroundService
         string? eventHubName = Environment.GetEnvironmentVariable("eventHubName");
         string? blobStorageUri = Environment.GetEnvironmentVariable("blobStorageUri");
 
-        _logger.LogInformation($"Environment variables expected: '{nameof(eventHubNamespaceUri)}', '{nameof(consumerGroupName)}', '{nameof(eventHubName)}', '{nameof(blobStorageUri)}'.");
+        string brokerHostName = Environment.GetEnvironmentVariable("brokerHostName");
+        
+        string brokerPortString = Environment.GetEnvironmentVariable("brokerPort");
+        int brokerPort =
+            !string.IsNullOrEmpty( brokerPortString)  
+                ? int.Parse(brokerPortString)
+                : 8883;
+
+        string deviceId = Environment.GetEnvironmentVariable("deviceId");
+        string publishTopic = Environment.GetEnvironmentVariable("publishTopic");
+
+        _logger.LogInformation($"Environment variables expected: '{nameof(eventHubNamespaceUri)}', '{nameof(consumerGroupName)}', '{nameof(eventHubName)}', '{nameof(blobStorageUri)}', '{nameof(brokerHostName)}', '{nameof(brokerPort)}', '{nameof(deviceId)}', '{nameof(publishTopic)}'.");
 
         if (string.IsNullOrEmpty(eventHubNamespaceUri)
                 ||  string.IsNullOrEmpty(consumerGroupName)
                 || string.IsNullOrEmpty(eventHubName)
-                || string.IsNullOrEmpty( blobStorageUri))
+                || string.IsNullOrEmpty(blobStorageUri)
+                || string.IsNullOrEmpty(brokerHostName)
+                || string.IsNullOrEmpty(deviceId)
+                || string.IsNullOrEmpty(publishTopic))
         {
             _logger.LogError($"Environment variables not found. Ignore providers.");
         }
@@ -44,7 +58,7 @@ internal class ModuleBackgroundService : BackgroundService
 
             try
             {
-                _mqttClientProvider = new MqttClientProvider(_logger);
+                _mqttClientProvider = new MqttClientProvider(brokerHostName, brokerPort, deviceId, publishTopic, _logger);
 
                 _logger.LogInformation($"MqttClientProvider initialized.");
 
