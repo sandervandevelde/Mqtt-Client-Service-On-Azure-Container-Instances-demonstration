@@ -8,9 +8,10 @@ Demonstration of running a stateful MQTT client service within the Azure Contain
 
 ## CLI commands and flow
 
+Regarding the Azure Event Grid MQTT support, check the [az-cli-eventgrid-mqtt.md](az-cli-eventgrid-mqtt.md) for building all MQTT related resources upfront. 
+
 If you want to play along, check the [az-cli-mqtt-stateful-service.md](az-cli-mqtt-stateful-service.md) file for building and deploying resouces and container instance.
 
-Regarding the Azure Event Grid MQTT support, check the [az-cli-eventgrid-mqtt.md](az-cli-eventgrid-mqtt.md) for building all MQTT related resources. 
 
 
 
@@ -23,6 +24,10 @@ eventHubNamespaceUri = 'acs-eventprocessor-service-ehns.servicebus.windows.net'
 consumerGroupName = 'aci'
 eventHubName = 'messages'
 blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesacicheckpoints'
+brokerHostName='egns-aci-test-mqtt.westeurope-1.ts.eventgrid.azure.net'
+brokerPort='8883'
+deviceId='client1-authnID'
+publishTopic='acitest/client2-authnID/alert'
 ```
 
 

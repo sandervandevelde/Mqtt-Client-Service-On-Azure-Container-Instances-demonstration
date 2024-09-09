@@ -132,8 +132,13 @@ eventHubNamespaceUri = 'acs-eventprocessor-service-ehns.servicebus.windows.net'
 consumerGroupName = 'aci'
 eventHubName = 'messages'
 blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesacicheckpoints'
+brokerHostName='egns-aci-test-mqtt.westeurope-1.ts.eventgrid.azure.net'
+brokerPort='8883'
+deviceId='client1-authnID'
+publishTopic='acitest/client2-authnID/alert'
 ```
 
+Notice that the client certificates are part of the module and not configurable via the environment variables.
 
 
 ## Create ACI
@@ -141,7 +146,7 @@ blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesaci
 Create the Azure Container Instance running the EventProcessor module:
 
 ```
-az container create --name aci-test-eventprocessor --resource-group acsResourceGroup --image mycontainerregistrysvdv.azurecr.io/mqtt-stateful-service:0.0.1-amd64 --acr-identity $USERID --assign-identity $USERID --cpu 1 --memory 1 --os-type Linux --environment-variables eventHubNamespaceUri='acs-eventprocessor-service-ehns.servicebus.windows.net' consumerGroupName='aci' eventHubName='messages' blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesacicheckpoints' --sku Standard --run-as-group $USERID
+az container create --name aci-test-eventprocessor --resource-group acsResourceGroup --image mycontainerregistrysvdv.azurecr.io/mqtt-stateful-service:0.0.1-amd64 --acr-identity $USERID --assign-identity $USERID --cpu 1 --memory 1 --os-type Linux --environment-variables eventHubNamespaceUri='acs-eventprocessor-service-ehns.servicebus.windows.net' consumerGroupName='aci' eventHubName='messages' blobStorageUri='https://acseventhubchckpntstor.blob.core.windows.net/messagesacicheckpoints' brokerHostName='egns-aci-test-mqtt.westeurope-1.ts.eventgrid.azure.net' brokerPort='8883' deviceId='client1-authnID' publishTopic='acitest/client2-authnID/alert' --sku Standard --run-as-group $USERID
 ```
 
 
