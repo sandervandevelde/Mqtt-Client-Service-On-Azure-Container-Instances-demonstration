@@ -8,6 +8,7 @@ Install this [MQTT client toolbox](https://mqttx.app/)
 
 ## Create client certficates
 
+```
 mkdir aci
 cd aci
 
@@ -28,20 +29,24 @@ step certificate create client2-authnID client2-authnID.pem client2-authnID.key 
 step certificate fingerprint client2-authnID.pem
 
 // remember Client2 Thumbprint
-
+```
 
 
 ## Create Eventgrid with mqtt support
 
+```
 az eventgrid namespace create -g acsResourceGroup -n egns-aci-test-mqtt --topic-spaces-configuration "{state:Enabled}"
+```
 
 
 
 ## Create Clients
 
+```
 az eventgrid namespace client create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n client1-authnID --authentication-name client1-authnID --client-certificate-authentication "{validationScheme:ThumbprintMatch,allowed-thumbprints:[Client1-Thumbprint]}" --attributes "{'ispublisher':1}"
 
 az eventgrid namespace client create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n client2-authnID --authentication-name client2-authnID --client-certificate-authentication "{validationScheme:ThumbprintMatch,allowed-thumbprints:[Client2-Thumbprint]}" --attributes "{'issubscriber':1}"
+```
 
 *Note*: The thumbprint must be surrounded with square brackets and no space is needed between the ending square bracket and ending accolade. 
 
@@ -49,34 +54,43 @@ az eventgrid namespace client create -g acsResourceGroup --namespace-name egns-a
 
 ## Create Client groups
 
+```
 az eventgrid namespace client-group create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n publishersgroup --group-query "attributes.ispublisher=1"
 
 az eventgrid namespace client-group create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n subscribersgroup --group-query "attributes.issubscriber=1"
+```
 
 
 
 ## Topic space publisher
 
+```
 az eventgrid namespace topic-space create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n publishertopicspace --topic-templates 'acitest/+/alert'
+```
 
 
 
 ## Topic space subscriber
 
+```
 az eventgrid namespace topic-space create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n subscribertopicspace --topic-templates 'acitest/${client.authenticationName}/alert'
-
+```
 
 
 
 ## Permission binding publishers
 
+```
 az eventgrid namespace permission-binding create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n publisherpermissionbinding --client-group-name publishersgroup --permission publisher --topic-space-name publishertopicspace
+```
 
 
 
 ## Permission binding subscribers
 
+```
 az eventgrid namespace permission-binding create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n subscriberpermissionbinding --client-group-name subscribersgroup --permission subscriber --topic-space-name subscribertopicspace
+```
 
 
 ## optional: Test publisher and subscriber in MQTTX
