@@ -20,16 +20,10 @@ public class  MqttClientProvider
 
         _logger = logger;
 
-        //// Add the loaded certificate to a certificate collection via constants
-        //X509Certificate2Collection certificateCollection = new X509Certificate2Collection
-        //{
-        //    new X509Certificate2(X509Certificate2.CreateFromPem(pemCert, keyCert).Export(X509ContentType.Pkcs12))
-        //};
-
         // Add the loaded certificate to a certificate collection via files
         var pemCert = "client1-authnID.pem";
         var keyCert = "client1-authnID.key";
-        X509Certificate2Collection certificateCollection = new X509Certificate2Collection
+        var certificateCollection = new X509Certificate2Collection
         {
             new X509Certificate2(X509Certificate2.CreateFromPemFile(pemCert, keyCert).Export(X509ContentType.Pkcs12))
         };
@@ -41,7 +35,7 @@ public class  MqttClientProvider
                     .WithClientCertificates(certificateCollection)
                     .Build();
 
-        // connect
+        // Construct MQTT client
         mqttFactory = new MqttFactory();
 
         mqttClient = mqttFactory.CreateMqttClient();
@@ -49,7 +43,7 @@ public class  MqttClientProvider
         var mqttClientOptions = new MqttClientOptionsBuilder()
             .WithTcpServer(brokerHostName, brokerPort)
             .WithClientId(deviceId)
-            .WithCredentials(deviceId, "")  //use client authentication name in the username
+            .WithCredentials(deviceId, "") // Password is not relevant for this scenario 
             .WithCleanSession(false) 
             .WithProtocolVersion(MQTTnet.Formatter.MqttProtocolVersion.V500)
             .WithTlsOptions(tlsOptions)
@@ -59,33 +53,12 @@ public class  MqttClientProvider
         mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None).Wait();
     }
 
-    public bool ProcessMessage(EventMessageReceivedEventArgs eventMessageRecieved)
+    public bool PublishMessage(EventMessageReceivedEventArgs eventMessageRecieved)
     {
         var puback = mqttClient.PublishStringAsync(_publishTopic, eventMessageRecieved.Body).Result;
 
         _logger.LogInformation($"Event message {eventMessageRecieved.Body} published successfully ({puback.ReasonString}).");
 
-        return true;
+        return string.IsNullOrEmpty(puback.ReasonString);
     }
-
-//    private static string keyCert = @"-----BEGIN EC PRIVATE KEY-----
-//MHcCAQEEIKqxcNh6yYJPUrtHR6hIOs6q3I+2VWGn+8BM8c/paT6WoAoGCCqGSM49
-//AwEHoUQDQgAE4lTqBbb62dCyL5UEPbQDEjGi5YfMN0RNtBh+P6RMQ0bFIAf+BPZC
-//JFHkaVZ6matbH9tBu+cQNV223DWDppM6vA==
-//-----END EC PRIVATE KEY-----";
-
-//    private static string pemCert = @"-----BEGIN CERTIFICATE-----
-//MIIB3zCCAYWgAwIBAgIQTgzW3MOcMQvK1Cq4Z/wrWTAKBggqhkjOPQQDAjA4MRIw
-//EAYDVQQKEwlBY2lUZXN0Q0ExIjAgBgNVBAMTGUFjaVRlc3RDQSBJbnRlcm1lZGlh
-//dGUgQ0EwHhcNMjQwOTAyMTQzMDI2WhcNMzIxMTE5MTQzMDEwWjAaMRgwFgYDVQQD
-//Ew9jbGllbnQxLWF1dGhuSUQwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATiVOoF
-//tvrZ0LIvlQQ9tAMSMaLlh8w3RE20GH4/pExDRsUgB/4E9kIkUeRpVnqZq1sf20G7
-//5xA1XbbcNYOmkzq8o4GOMIGLMA4GA1UdDwEB/wQEAwIHgDAdBgNVHSUEFjAUBggr
-//BgEFBQcDAQYIKwYBBQUHAwIwHQYDVR0OBBYEFAsfqnUYFdC8pM0AHMB8Y1hr+1bK
-//MB8GA1UdIwQYMBaAFC4tuqtJumyiyaO0pwMkgFtrtXf+MBoGA1UdEQQTMBGCD2Ns
-//aWVudDEtYXV0aG5JRDAKBggqhkjOPQQDAgNIADBFAiEAhHi/OxM+W8LVg6EMTwb6
-//hQSr3NJNQJQYqbG+hS0hyEsCIFSaIJ+kSoKWPj9Sbs0pcwnkBLXWgat/GE6YxG8C
-//Evyw
-//-----END CERTIFICATE-----";
-
 }

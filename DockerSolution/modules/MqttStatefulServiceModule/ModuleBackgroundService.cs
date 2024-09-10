@@ -88,7 +88,7 @@ internal class ModuleBackgroundService : BackgroundService
 
     private void EventProcessorProvider_MessageReceived(object? sender, EventMessageReceivedEventArgs e)
     {
-        var success = _mqttClientProvider.ProcessMessage(e);
+        var success = _mqttClientProvider.PublishMessage(e);
 
         if (success)
         {
