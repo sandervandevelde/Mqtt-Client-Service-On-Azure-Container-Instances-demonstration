@@ -34,7 +34,7 @@ step certificate fingerprint client2-authnID.pem
 ```
 
 
-## Create Eventgrid with mqtt support
+## Create an Eventgrid Namespace with mqtt support
 
 Create the Event Grid Name space with MQTT support in one go:
 
@@ -44,7 +44,7 @@ az eventgrid namespace create -g acsResourceGroup -n egns-aci-test-mqtt --topic-
 
 
 
-## Create Clients
+## Register the two Clients
 
 Register two clients in the broker, one with a publisher attribute and one with a subscriber attribute:
 
@@ -54,13 +54,13 @@ az eventgrid namespace client create -g acsResourceGroup --namespace-name egns-a
 az eventgrid namespace client create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n client2-authnID --authentication-name client2-authnID --client-certificate-authentication "{validationScheme:ThumbprintMatch,allowed-thumbprints:[Client2-Thumbprint]}" --attributes "{'issubscriber':1}"
 ```
 
-*Note*: The thumbprint must be surrounded with square brackets and no space is needed between the ending square bracket and ending accolade. 
+*Note*: The thumbprint must be surrounded with square brackets, no space is needed between the ending square bracket and the ending accolade. 
 
 
 
-## Create Client groups
+## Create two Client groups
 
-Create two client groups, one for the pubishers and one for the subscribers:
+Create two client groups, one for the publishers and one for the subscribers:
 
 ```
 az eventgrid namespace client-group create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n publishersgroup --group-query "attributes.ispublisher=1"
@@ -70,9 +70,9 @@ az eventgrid namespace client-group create -g acsResourceGroup --namespace-name 
 
 
 
-## Topic space publisher
+## Create a Topic space for the publisher
 
-Create topic space and topic template for the publishers:
+Create topic space and topic template for the publisher clients:
 
 ```
 az eventgrid namespace topic-space create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n publishertopicspace --topic-templates 'acitest/+/alert'
@@ -81,19 +81,19 @@ az eventgrid namespace topic-space create -g acsResourceGroup --namespace-name e
 Notice that the publisher can write messages in multiple topics where the '+' represents the client identifier.
 
 
-## Topic space subscriber
+## Create a Topic space for the subscriber
 
-Create topic space and topic template for the subscribers:
+Create topic space and topic template for the subscriber clients:
 
 ```
 az eventgrid namespace topic-space create -g acsResourceGroup --namespace-name egns-aci-test-mqtt -n subscribertopicspace --topic-templates 'acitest/${client.authenticationName}/alert'
 ```
 
-Notice that each subscriber can only read its own topic based on the 'client authentication name'.
+Notice that each subscriber can only read their own topic based on the 'client authentication name'.
 
 
 
-## Permission binding publishers
+## Create a Permission binding for publishers
 
 Bring both the publisher client group and the publisher topic space together and mark it with publisher permissions:
 
@@ -103,7 +103,7 @@ az eventgrid namespace permission-binding create -g acsResourceGroup --namespace
 
 
 
-## Permission binding subscribers
+## Create a Permission binding for subscribers
 
 Bring both the subscriber client group and the subscriber topic space together and mark it with subscriber permissions:
 
