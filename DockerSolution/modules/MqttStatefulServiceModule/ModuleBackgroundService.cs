@@ -80,7 +80,7 @@ internal class ModuleBackgroundService : BackgroundService
 
         while (true)
         {
-            _logger.LogInformation($"Processed: successful = {_counterSuccess} messages at {DateTime.UtcNow}");
+            _logger.LogInformation($"Processed: successful = {_counterSuccess} / unsuccessful = {_counterFail} messages at {DateTime.UtcNow}");
 
             await Task.Delay(60000);
         }
